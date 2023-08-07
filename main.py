@@ -20,6 +20,8 @@ def ArticleRequest():
 def ArticleEbookConvert():
     if not os.path.exists('./temp'):
         os.makedirs('./temp')
+    if not os.path.exists('./ebooks'):
+        os.makedirs('./ebooks')
     articles = ArticleRequest()
     edition = GetEdition()
     mdFile = MdUtils(file_name=edition, title=edition)
