@@ -1,1 +1,9 @@
 # Economist2Epub
+
+I wanted to read Economist weekly articles on my kindle so I made a script.
+
+## Requirements
+- requirements.txt
+- pandoc
+- curl
+- [papeer](https://github.com/lapwat/papeer)
