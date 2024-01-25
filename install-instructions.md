@@ -37,3 +37,7 @@ go install github.com/lapwat/papeer@latest
 wget https://hackage.haskell.org/package/pandoc-1.17.0.3/pandoc-1.17.0.3.tar.gz
 
 tar xvzf pandoc-1.17.0.3.tar.gz
+
+## Run:
+
+python3 main.py
