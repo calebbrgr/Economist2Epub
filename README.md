@@ -2,7 +2,7 @@
 
 I wanted to read Economist weekly articles on my kindle so I made a script.
 
-![example.gif]
+![](example.gif)
 
 ## Requirements
 - requirements.txt
