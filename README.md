@@ -1,6 +1,7 @@
 # Economist2Epub
 
 I wanted to read Economist weekly articles on my kindle so I made a script.
+*I endorse only using this if you currently have an Economist subscription*
 
 ![](example.gif)
 
