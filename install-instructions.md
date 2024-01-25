@@ -18,7 +18,7 @@ sudo tar -xvf go1.18.3.linux-amd64.tar.gz
 
 sudo mv go /usr/local
 
-*Make sure your go path is set correctly*
+*Make sure your go path is set correctly:*
 
 export GOROOT=/usr/local/go
 
