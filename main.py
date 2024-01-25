@@ -7,6 +7,8 @@ import json
 import time
 import os
 
+# for bot detection / overlaod
+import random
 
 site = 'https://www.economist.com/weeklyedition'
 
@@ -29,7 +31,7 @@ def ArticleEbookConvert():
     for article in articles['chapters']:
         if 'interactive' in str(article):
             continue
-        time.sleep(1)
+        time.sleep(random.randint(1, 3))
         site = requests.get(str(article['url']))
         if site.status_code == 200:
             print('Getting: ', str(article['url']))
@@ -38,6 +40,7 @@ def ArticleEbookConvert():
             header = str(soup.find('h1').text)
             sub_header = soup.find_all('h2')
             try:
+                # this value is subject to change
                 sub_header = str(sub_header[8].text)
             except IndexError:
                 sub_header = str('')
@@ -58,7 +61,8 @@ def ArticleEbookConvert():
             mdFile.new_header(level=1, title=header)
             mdFile.new_line(text=sub_header, bold_italics_code='b')
             mdFile.new_line(mdFile.new_inline_image(text='', path='./temp/img' + str(count) +'.png'))
-            article_body = soup.find_all('p', class_ ='article__body-text')
+            # this value is subject to change
+            article_body = soup.find_all(attrs={"data-component" : "paragraph"})
             try:
                 if 'our weekly' in article_body[-1].text:
                     article_body.pop()
