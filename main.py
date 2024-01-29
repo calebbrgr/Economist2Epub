@@ -12,8 +12,8 @@ import random
 
 site = 'https://www.economist.com/weeklyedition'
 
-def ArticleRequest():
-    subprocess.check_output("./utils/articlefetch.sh")
+def ArticleRequest(path):
+    subprocess.check_output(path)
     with open('./temp/articlelist.json') as f:
 	    data = json.load(f)
     return data
@@ -24,45 +24,52 @@ def ArticleEbookConvert():
         os.makedirs('./temp')
     if not os.path.exists('./ebooks'):
         os.makedirs('./ebooks')
-    articles = ArticleRequest()
     edition = GetEdition()
     mdFile = MdUtils(file_name=edition, title=edition)
     count = 0
-    for article in articles['chapters']:
-        if 'interactive' in str(article):
-            continue
-        time.sleep(random.randint(1, 3))
-        site = requests.get(str(article['url']))
-        if site.status_code == 200:
-            print('Getting: ', str(article['url']))
-            html = site.content
-            soup = BeautifulSoup(html, 'lxml')
-            header = str(soup.find('h1').text)
-            sub_header = soup.find_all('h2')
-            try:
-                # this value is subject to change
-                sub_header = str(sub_header[8].text)
-            except IndexError:
-                sub_header = str('')
-                pass
-            try:
-                top_img = soup.find('img')
-                top_img_src = top_img.attrs['src']
-                r = requests.get(top_img_src, stream=True)
-                if r.status_code == 200:
-                    count+=1
-                    with open('./temp/img'+ str(count) +'.png', 'wb') as f:
-                        r.raw.decode_content = True
-                        shutil.copyfileobj(r.raw, f)
-            except requests.exceptions.MissingSchema or requests.exceptions.InvalidSchema:
-                print('missing/invalid schema')
+    path = "./utils/articlefetch.sh"
+    path2 = "./utils/articlefetch2.sh"
+    paths = [path, path2]
+    print(paths)
+    for path in paths:
+        articles = ArticleRequest(path)
+        for article in articles['chapters']:
+            if 'interactive' in str(article):
                 continue
-            print('Adding MD...')
-            mdFile.new_header(level=1, title=header)
-            mdFile.new_line(text=sub_header, bold_italics_code='b')
-            mdFile.new_line(mdFile.new_inline_image(text='', path='./temp/img' + str(count) +'.png'))
-            # this value is subject to change
-            article_body = soup.find_all(attrs={"data-component" : "paragraph"})
+            if 'covers' in str(article):
+                continue
+            time.sleep(random.randint(1, 3))
+            site = requests.get(str(article['url']))
+            if site.status_code == 200:
+                print('Getting: ', str(article['url']))
+                html = site.content
+                soup = BeautifulSoup(html, 'lxml')
+                header = str(soup.find('h1').text)
+                sub_header = soup.find_all('h2')
+                try:
+                    # this value is subject to change
+                    sub_header = str(sub_header[8].text)
+                except IndexError:
+                    sub_header = str('')
+                    pass
+                try:
+                    top_img = soup.find('img')
+                    top_img_src = top_img.attrs['src']
+                    r = requests.get(top_img_src, stream=True)
+                    if r.status_code == 200:
+                        count+=1
+                        with open('./temp/img'+ str(count) +'.png', 'wb') as f:
+                            r.raw.decode_content = True
+                            shutil.copyfileobj(r.raw, f)
+                except requests.exceptions.MissingSchema or requests.exceptions.InvalidSchema:
+                    print('missing/invalid schema')
+                    continue
+                print('Adding MD...')
+                mdFile.new_header(level=1, title=header)
+                mdFile.new_line(text=sub_header, bold_italics_code='b')
+                mdFile.new_line(mdFile.new_inline_image(text='', path='./temp/img' + str(count) +'.png'))
+                # this value is subject to change
+                article_body = soup.find_all(attrs={"data-component" : "paragraph"})
             try:
                 if 'our weekly' in article_body[-1].text:
                     article_body.pop()
