@@ -3,7 +3,7 @@
 
 ## Clone the repo:
 
-git clone https://github.com/cheeberger/Economist2Epub.git
+git clone https://github.com/cheeberger/Economist2Epub.git](https://github.com/calebbrgr/Economist2Epub.git
 
 cd ./Economist2Epub
 
@@ -18,7 +18,7 @@ sudo tar -xvf go1.18.3.linux-amd64.tar.gz
 
 sudo mv go /usr/local
 
-*Make sure your go path is set correctly:*
+*Make sure your go path is set correctly; adding the following to .bashrc/.zshrc:*
 
 export GOROOT=/usr/local/go
 
@@ -41,3 +41,5 @@ tar xvzf pandoc-1.17.0.3.tar.gz
 ## Run:
 
 python3 main.py
+
+The epub file can now be found in ./ebooks for your use. Personally I load the file to my ereader with [calibre](https://github.com/kovidgoyal/calibre).
